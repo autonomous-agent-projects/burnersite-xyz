@@ -1,0 +1,13 @@
+{{/* Stats widget — pass data via dict: {{ partial "stats-widget.html" (dict "title" "Scoring Leaders" "items" .items) }} */}}
+<div class="stats-widget">
+  <div class="stats-widget__header">
+    <span>{{ .title }}</span>
+  </div>
+  {{ range $i, $item := .items }}
+  <div class="stats-widget__row">
+    <span class="stats-widget__rank">{{ add $i 1 }}</span>
+    <span class="stats-widget__name">{{ $item.name }}</span>
+    <span class="stats-widget__value">{{ $item.value }}</span>
+  </div>
+  {{ end }}
+</div>

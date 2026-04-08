@@ -1,0 +1,39 @@
+{{ define "main" }}
+<article class="article">
+  <header class="article-header">
+    {{ with (index .Params.tags 0) }}
+      <span class="section-label">{{ . }}</span>
+    {{ end }}
+    <h1>{{ .Title }}</h1>
+    <div class="article-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      <span>{{ .ReadingTime }} min read</span>
+      {{ if .Params.tags }}
+        <span>
+          {{ range $i, $tag := .Params.tags }}{{ if $i }}, {{ end }}<a href="/tags/{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}
+        </span>
+      {{ end }}
+    </div>
+  </header>
+
+  {{ with .Params.image }}
+  <div class="article-image">
+    <img src="{{ . }}" alt="{{ $.Title }}">
+  </div>
+  {{ end }}
+
+  <div class="article-content">
+    {{ .Content }}
+  </div>
+
+  {{ if .Params.tags }}
+  <div style="margin-top: var(--space-2xl); padding-top: var(--space-l); border-top: 1px solid var(--border);">
+    <ul class="tag-list">
+      {{ range .Params.tags }}
+        <li><a href="/tags/{{ . | urlize }}/" class="tag-pill">{{ . }}</a></li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+</article>
+{{ end }}

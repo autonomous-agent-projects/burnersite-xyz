@@ -1,0 +1,52 @@
+{{ define "main" }}
+
+{{/* Featured Post — first post with featured: true, or just the latest */}}
+{{ $featured := index (where .Site.RegularPages "Params.featured" true) 0 }}
+{{ if not $featured }}
+  {{ $featured = index .Site.RegularPages 0 }}
+{{ end }}
+
+{{ with $featured }}
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-label">
+        <span class="badge">Featured</span>
+        <span class="section-label">{{ with (index .Params.tags 0) }}{{ . }}{{ end }}</span>
+      </div>
+      <h1><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+      {{ with .Params.summary }}
+        <p class="hero-summary">{{ . }}</p>
+      {{ end }}
+      <div class="hero-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        <span>{{ .ReadingTime }} min read</span>
+      </div>
+    </div>
+    <a href="{{ .RelPermalink }}" class="hero-image">
+      {{ if .Params.image }}
+        <img src="{{ .Params.image }}" alt="{{ .Title }}">
+      {{ else }}
+        <div class="placeholder-img">&#127936;</div>
+      {{ end }}
+    </a>
+  </div>
+</section>
+{{ end }}
+
+{{/* Latest Posts Grid — skip the featured post */}}
+{{ $posts := where .Site.RegularPages "Type" "posts" }}
+{{ $remaining := after 1 $posts }}
+{{ if gt (len $remaining) 0 }}
+<div class="section-header">
+  <h2>Latest Analysis</h2>
+  <a href="/posts/">View all &rarr;</a>
+</div>
+<div class="post-grid">
+  {{ range $remaining | first 6 }}
+    {{ partial "post-card.html" . }}
+  {{ end }}
+</div>
+{{ end }}
+
+{{ end }}
